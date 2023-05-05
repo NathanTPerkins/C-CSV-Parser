@@ -128,6 +128,7 @@ u_int8_t csv_parser::arduino_parser::setData(File& input_file){
     rewind(&input_file);
     int i = 0, j = 0; 
     char data_val[NUM_LENGTH];
+    memset(col_name, 0, *longest_col);
     char c;
     while(input_file.available()){
         c = input_file.read();
@@ -162,6 +163,7 @@ u_int8_t csv_parser::arduino_parser::setColumns(File& input_file, int* longest_c
     }
     rewind(&input_file);
     char col_name[*longest_col];
+    memset(col_name, 0, *longest_col);
     char c;
     int i = 0, j = 0;
     while((c = input_file.read()) != '\n'){
@@ -236,7 +238,7 @@ void csv_parser::arduino_parser::head(int numRows = 5){
     Serial.printf("\n");
     for(int i = 0; i < numRows; ++i){
         for(int j = 0; j < this->columns_length; ++j){
-            Serial.printf("%-8.8s\t", this->data[i][j]);
+            Serial.printf("%8.8s\t", this->data[i][j]);
         }
         Serial.printf("\n");
     }
@@ -259,7 +261,7 @@ void csv_parser::arduino_parser::tail(int numRows = 5){
     Serial.printf("\n");
     for(int i = this->size - (numRows); i < this->size; ++i){
         for(int j = 0; j < this->columns_length; ++j){
-            Serial.printf("%7.8s\t", this->data[i][j]);
+            Serial.printf("%8.8s\t", this->data[i][j]);
         }
         Serial.printf("\n");
     }

@@ -1,5 +1,4 @@
 #include "CSVParser.h"
-#include <iostream>
 csv_parser::parser::parser(const char * filename, int precision = 10){
     this->m_fileName = new char[strlen(filename)];
     this->precision = precision;
@@ -122,6 +121,7 @@ u_int8_t csv_parser::parser::setData(FILE *input_file){
     rewind(input_file);
     int i = 0, j = 0; 
     char data_val[NUM_LENGTH];
+    memset(data_val, 0, NUM_LENGTH);
     char c;
     while((c = fgetc(input_file)) != EOF){
         if(c == '\n'){
@@ -155,10 +155,11 @@ u_int8_t csv_parser::parser::setColumns(FILE *input_file, int* longest_col){
     }
     rewind(input_file);
     char col_name[*longest_col];
+    memset(col_name, 0, *longest_col);
     char c;
     int i = 0;
     while((c = getc(input_file)) != '\n'){
-        if(c == ','){
+        if(c == ','){ 
             strcpy(this->columns[i],col_name);
             memset(col_name, 0, *longest_col);
             ++i;
@@ -230,7 +231,7 @@ void csv_parser::parser::head(int numRows = 5){
     printf("\n");
     for(int i = 0; i < numRows; ++i){
         for(int j = 0; j < this->columns_length; ++j){
-            printf("%-8.8s\t", this->data[i][j]);
+            printf("%8.8s\t", this->data[i][j]);
         }
         printf("\n");
     }
@@ -253,7 +254,7 @@ void csv_parser::parser::tail(int numRows = 5){
     printf("\n");
     for(int i = this->size - (numRows); i < this->size; ++i){
         for(int j = 0; j < this->columns_length; ++j){
-            printf("%7.8s\t", this->data[i][j]);
+            printf("%8.8s\t", this->data[i][j]);
         }
         printf("\n");
     }
