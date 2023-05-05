@@ -128,7 +128,7 @@ u_int8_t csv_parser::arduino_parser::setData(File& input_file){
     rewind(&input_file);
     int i = 0, j = 0; 
     char data_val[NUM_LENGTH];
-    memset(col_name, 0, *longest_col);
+    memset(col_name, 0, NUM_LENGTH);
     char c;
     while(input_file.available()){
         c = input_file.read();
