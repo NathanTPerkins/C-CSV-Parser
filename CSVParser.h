@@ -3,7 +3,9 @@
 
 #include <string.h>
 #include <stdio.h>
-// #include <SD.h>
+#ifdef ARDUINO_PARSER
+#include <SD.h>
+#endif
 
 #define NUM_LENGTH 100
 
