@@ -1,7 +1,7 @@
 all: csv
 
-csv: CSVParser.cpp CSVParser.h
-	@g++ $< -o $@
+csv: CSVParser.cpp main.cpp
+	@g++ $^ -o $@
 
 .PHONY: clean
 

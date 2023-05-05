@@ -110,7 +110,7 @@ int csv_parser::parser::getNumEntries(FILE *input_file){
             ++i;
         }
     }
-    return i - 1;
+    return i;
 }
 
 u_int8_t csv_parser::parser::setData(FILE *input_file){
@@ -122,6 +122,7 @@ u_int8_t csv_parser::parser::setData(FILE *input_file){
     char data_val[NUM_LENGTH];
     char c;
     while((c = fgetc(input_file)) != EOF){
+        // std::cout << c;
         if(c == '\n'){
             if(i != 0){
                 strcpy(this->data[i - 1][j], data_val);
@@ -143,6 +144,7 @@ u_int8_t csv_parser::parser::setData(FILE *input_file){
         }
         
     }
+    strcpy(this->data[i - 1][j], data_val);
     return 1;
 }
 
@@ -202,7 +204,9 @@ csv_parser::parser::~parser(){
         }
     }
     delete [] this->data;
+    this->data = nullptr;
     delete [] this->m_fileName;
+    this->m_fileName = nullptr;
 }
 
 int csv_parser::parser::getSize(){
