@@ -220,6 +220,52 @@ csv_parser::arduino_parser::~arduino_parser(){
     this->m_fileName = nullptr;
 }
 
+void csv_parser::arduino_parser::head(int numRows = 5){
+    if(numRows > this->size){
+        return;
+    }
+    for(int i = 0; i < this->columns_length; ++i){
+        Serial.printf("%s\t", this->columns[i]);
+    }
+    Serial.printf("\n");
+    for(int i = 0; i < this->columns_length; ++i){
+        for(int j = 0; j < strlen(this->columns[i]); ++j){
+            Serial.printf("--");
+        }
+    }
+    Serial.printf("\n");
+    for(int i = 0; i < numRows; ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            Serial.printf("%-8.8s\t", this->data[i][j]);
+        }
+        Serial.printf("\n");
+    }
+    Serial.printf("\n");
+}
+
+void csv_parser::arduino_parser::tail(int numRows = 5){
+    if(numRows > this->size){
+        return;
+    }
+    for(int i = 0; i < this->columns_length; ++i){
+        Serial.printf("%s\t", this->columns[i]);
+    }
+    Serial.printf("\n");
+    for(int i = 0; i < this->columns_length; ++i){
+        for(int j = 0; j < strlen(this->columns[i]); ++j){
+            Serial.printf("--");
+        }
+    }
+    Serial.printf("\n");
+    for(int i = this->size - (numRows); i < this->size; ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            Serial.printf("%7.8s\t", this->data[i][j]);
+        }
+        Serial.printf("\n");
+    }
+    Serial.printf("\n");
+}
+
 int csv_parser::arduino_parser::getSize() const {
     return this->size;
 }

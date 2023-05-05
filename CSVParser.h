@@ -5,6 +5,7 @@
 #include <stdio.h>
 #ifdef ARDUINO_PARSER
 #include <SD.h>
+#include <Arduino.h>
 #endif
 
 #define NUM_LENGTH 100
@@ -69,6 +70,8 @@ namespace csv_parser{
         char **getColumns()const;
         int numColumns()const;
         char * getFilename()const;
+        void head(int);
+        void tail(int);
     };
     #endif
 
