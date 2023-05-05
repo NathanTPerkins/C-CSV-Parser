@@ -37,6 +37,8 @@ namespace csv_parser{
         char **getColumns()const;
         int numColumns()const;
         char * getFilename()const;
+        void head(int);
+        void tail(int);
     };
 
     #ifdef ARDUINO_PARSER

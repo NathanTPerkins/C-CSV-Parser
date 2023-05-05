@@ -1,7 +1,7 @@
 all: csv
 
 csv: CSVParser.cpp main.cpp
-	@g++ $^ -o $@
+	@g++ $^ -o $@ -Wall
 
 .PHONY: clean
 

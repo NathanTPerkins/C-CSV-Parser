@@ -1,4 +1,5 @@
 #include "CSVParser.h"
+#include <iostream>
 csv_parser::parser::parser(const char * filename, int precision = 10){
     this->m_fileName = new char[strlen(filename)];
     this->precision = precision;
@@ -12,8 +13,9 @@ csv_parser::parser::parser(const char * filename, int precision = 10){
         this->columns_length = col_count;
         this->longest_col = longest_col;
         this->columns = new char*[col_count];
-        for(int i = 0; i < col_count; ++i)
+        for(int i = 0; i < col_count; ++i){
             this->columns[i] = new char[longest_col];
+        }
     }
     setColumns(csv, &longest_col);
     this->size = getNumEntries(csv);
@@ -172,6 +174,7 @@ u_int8_t csv_parser::parser::getColumnData(FILE *input_file, int *col_count, int
     if(input_file == NULL || *col_count != 0 || *longest_col != 0){
         return 0;
     }
+    rewind(input_file);
     char c;
     int i = 0;
     *longest_col = 0;
@@ -181,9 +184,13 @@ u_int8_t csv_parser::parser::getColumnData(FILE *input_file, int *col_count, int
             if(i > *longest_col){
                 *longest_col = i;
             }
+            i = 0;
         }else{
             ++i;
         }
+    }
+    if(i > *longest_col){
+        *longest_col = i;
     }
     ++(*col_count);
     return 1;
@@ -205,6 +212,52 @@ csv_parser::parser::~parser(){
     this->data = nullptr;
     delete [] this->m_fileName;
     this->m_fileName = nullptr;
+}
+
+void csv_parser::parser::head(int numRows = 5){
+    if(numRows > this->size){
+        return;
+    }
+    for(int i = 0; i < this->columns_length; ++i){
+        printf("%s\t", this->columns[i]);
+    }
+    printf("\n");
+    for(int i = 0; i < this->columns_length; ++i){
+        for(int j = 0; j < strlen(this->columns[i]); ++j){
+            printf("--");
+        }
+    }
+    printf("\n");
+    for(int i = 0; i < numRows; ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            printf("%-8.8s\t", this->data[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void csv_parser::parser::tail(int numRows = 5){
+    if(numRows > this->size){
+        return;
+    }
+    for(int i = 0; i < this->columns_length; ++i){
+        printf("%s\t", this->columns[i]);
+    }
+    printf("\n");
+    for(int i = 0; i < this->columns_length; ++i){
+        for(int j = 0; j < strlen(this->columns[i]); ++j){
+            printf("--");
+        }
+    }
+    printf("\n");
+    for(int i = this->size - (numRows); i < this->size; ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            printf("%7.8s\t", this->data[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
 
 int csv_parser::parser::getSize() const {

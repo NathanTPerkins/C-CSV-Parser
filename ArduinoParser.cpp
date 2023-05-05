@@ -195,6 +195,9 @@ u_int8_t csv_parser::arduino_parser::getColumnData(File& input_file, int *col_co
             ++i;
         }
     }
+    if(i > *longest_col){
+        *longest_col = i;
+    }
     ++(*col_count);
     return 1;
 }
