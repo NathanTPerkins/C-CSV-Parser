@@ -154,12 +154,11 @@ u_int8_t csv_parser::parser::setColumns(FILE *input_file, int* longest_col){
     rewind(input_file);
     char col_name[*longest_col];
     char c;
-    int i = 0, j = 0;
+    int i = 0;
     while((c = getc(input_file)) != '\n'){
         if(c == ','){
             strcpy(this->columns[i],col_name);
             memset(col_name, 0, *longest_col);
-            j = 0;
             ++i;
         }else{
             strncat(col_name, &c, 1);

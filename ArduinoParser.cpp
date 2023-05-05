@@ -28,7 +28,7 @@ csv_parser::arduino_parser::arduino_parser(const char * filename, int precision 
         }
     }
     setData(csv);
-    fclose(csv);
+    csv.close();
 }
 
 void csv_parser::arduino_parser::operator=(const arduino_parser& p){
@@ -100,12 +100,12 @@ char ** csv_parser::arduino_parser::operator[](int i){
 }
 
 void csv_parser::arduino_parser::rewind(File* input_file){
-    char * filename = input_file->name();
+    const char * filename = input_file->name();
     input_file->close();
     *input_file = SD.open(filename, FILE_READ);
 }
 
-int csv_parser::parser::getNumEntries(File& input_file){
+int csv_parser::arduino_parser::getNumEntries(File& input_file){
     if(input_file == NULL){
         return 0;
     }
