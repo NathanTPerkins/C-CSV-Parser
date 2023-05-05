@@ -25,14 +25,15 @@ namespace csv_parser{
     public:
         parser() = delete;
         parser(const parser&);
-        parser& operator=(const parser&);
+        void operator=(const parser&);
         char ** operator[](int);
         parser(const char *, int);
         ~parser();
 
-        int getSize();
-        char **getColumns();
-        int numColumns();
+        int getSize()const;
+        char **getColumns()const;
+        int numColumns()const;
+        char * getFilename()const;
     };
 
 }

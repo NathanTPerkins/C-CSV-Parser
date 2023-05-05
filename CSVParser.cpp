@@ -1,6 +1,5 @@
 #include "CSVParser.h"
-
-csv_parser::parser::parser(const char * filename, int precision){
+csv_parser::parser::parser(const char * filename, int precision = 10){
     this->m_fileName = new char[strlen(filename)];
     this->precision = precision;
     strcpy(this->m_fileName, filename);
@@ -31,11 +30,12 @@ csv_parser::parser::parser(const char * filename, int precision){
     fclose(csv);
 }
 
-csv_parser::parser& csv_parser::parser::operator=(const parser& p){
+void csv_parser::parser::operator=(const parser& p){
     this->size = p.size;
     this->columns_length = p.columns_length;
     this->precision = p.precision;
-    strcpy(this->m_fileName, p.m_fileName);
+    this->m_fileName = new char[strlen(p.getFilename())];
+    strcpy(this->m_fileName, p.getFilename());
 
     this->columns = new char*[p.columns_length];
     for(int i = 0; i < this->columns_length; ++i)
@@ -60,14 +60,14 @@ csv_parser::parser& csv_parser::parser::operator=(const parser& p){
             strcpy(this->data[i][j], p.data[i][j]);
         }
     }
-    return *this;
 }
 
 csv_parser::parser::parser(const parser& p){
     this->size = p.size;
     this->columns_length = p.columns_length;
     this->precision = p.precision;
-    strcpy(this->m_fileName, p.m_fileName);
+    this->m_fileName = new char[strlen(p.getFilename())];
+    strcpy(this->m_fileName, p.getFilename());
 
     this->columns = new char*[p.columns_length];
     for(int i = 0; i < this->columns_length; ++i)
@@ -122,7 +122,6 @@ u_int8_t csv_parser::parser::setData(FILE *input_file){
     char data_val[NUM_LENGTH];
     char c;
     while((c = fgetc(input_file)) != EOF){
-        // std::cout << c;
         if(c == '\n'){
             if(i != 0){
                 strcpy(this->data[i - 1][j], data_val);
@@ -209,14 +208,18 @@ csv_parser::parser::~parser(){
     this->m_fileName = nullptr;
 }
 
-int csv_parser::parser::getSize(){
+int csv_parser::parser::getSize() const {
     return this->size;
 }
 
-char ** csv_parser::parser::getColumns(){
+char ** csv_parser::parser::getColumns() const {
     return this->columns;
 }
 
-int csv_parser::parser::numColumns(){
+int csv_parser::parser::numColumns() const {
     return this->columns_length;
+}
+
+char* csv_parser::parser::getFilename() const {
+    return this->m_fileName;
 }
