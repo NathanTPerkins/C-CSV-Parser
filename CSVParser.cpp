@@ -301,7 +301,26 @@ u_int8_t csv_parser::parser::concat(const parser& p){
     this->data = new_data;
     this->size += p.getSize();
     return 1;
+}
 
+FILE * csv_parser::parser::toCSV(const char * filename)const{
+    FILE * csv = fopen(filename, "w+");
+    for(int i = 0; i < this->columns_length - 1; ++i){
+        fprintf(csv, "%s,", this->columns[i]);
+    }
+    fprintf(csv, "%s", this->columns[this->columns_length - 1]);
+    fprintf(csv,"\n");
+    
+    for(int i = 0; i < this->size; ++i){
+        for(int j = 0; j < this->columns_length - 1; ++j){
+            fprintf(csv,"%s,", this->data[i][j]);
+        }
+        fprintf(csv, "%s", this->data[i][this->columns_length - 1]);
+        if(i != this->size - 1){
+            fprintf(csv, "\n");
+        }
+    }
+    return csv;
 }
 
 int csv_parser::parser::getSize() const {

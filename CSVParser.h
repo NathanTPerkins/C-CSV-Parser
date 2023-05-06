@@ -35,6 +35,7 @@ namespace csv_parser{
         ~parser();
 
         int getSize()const;
+        FILE *toCSV(const char *)const;
         char **getColumns()const;
         int numColumns()const;
         char * getFilename()const;
@@ -68,6 +69,7 @@ namespace csv_parser{
         arduino_parser(const char *, int);
         ~arduino_parser();
 
+        File *toCSV()const;
         u_int8_t concat(const parser&);
         void rewind(File*);
         int getSize()const; 

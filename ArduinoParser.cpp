@@ -271,6 +271,27 @@ void csv_parser::arduino_parser::tail(int numRows = 5){
     Serial.printf("\n");
 }
 
+// File * csv_parser::arduino_parser::toCSV(const char * filename)const{
+//     File *csv = new File;
+//     *csv = SD.open(filename, FILE_WRITE);
+//     for(int i = 0; i < this->columns_length - 1; ++i){
+//         fprintf(csv, "%s,", this->columns[i]);
+//     }
+//     fprintf(csv, "%s", this->columns[this->columns_length - 1]);
+//     fprintf(csv,"\n");
+    
+//     for(int i = 0; i < this->size; ++i){
+//         for(int j = 0; j < this->columns_length - 1; ++j){
+//             fprintf(csv,"%s,", this->data[i][j]);
+//         }
+//         fprintf(csv, "%s", this->data[i][this->columns_length - 1]);
+//         if(i != this->size - 1){
+//             fprintf(csv, "\n");
+//         }
+//     }
+//     return csv;
+// }
+
 u_int8_t csv_parser::arduino_parser::concat(const parser& p){
     if(p.columns_length != this->columns_length){
         return 0;
