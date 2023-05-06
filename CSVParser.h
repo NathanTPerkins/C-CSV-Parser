@@ -29,8 +29,8 @@ namespace csv_parser{
     public:
         parser() = delete;
         parser(const parser&);
-        void operator=(const parser&);
-        char ** operator[](int);
+        parser& operator=(const parser&);
+        char ** operator[](int)const;
         parser(const char *, int);
         ~parser();
 
@@ -38,6 +38,8 @@ namespace csv_parser{
         char **getColumns()const;
         int numColumns()const;
         char * getFilename()const;
+        parser& operator+=(const parser&);
+        u_int8_t concat(const parser&);
         void head(int);
         void tail(int);
     };
@@ -60,11 +62,13 @@ namespace csv_parser{
     public:
         arduino_parser() = delete;
         arduino_parser(const arduino_parser&);
-        void operator=(const arduino_parser&);
+        arduino_parser& operator=(const arduino_parser&);
+        arduino_parser& operator+=(const arduino_parser&);
         char ** operator[](int);
         arduino_parser(const char *, int);
         ~arduino_parser();
 
+        u_int8_t concat(const parser&);
         void rewind(File*);
         int getSize()const; 
         char **getColumns()const;

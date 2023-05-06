@@ -31,7 +31,7 @@ csv_parser::parser::parser(const char * filename, int precision = 10){
     fclose(csv);
 }
 
-void csv_parser::parser::operator=(const parser& p){
+csv_parser::parser& csv_parser::parser::operator=(const parser& p){
     this->size = p.size;
     this->columns_length = p.columns_length;
     this->precision = p.precision;
@@ -95,7 +95,7 @@ csv_parser::parser::parser(const parser& p){
     }
 }
 
-char ** csv_parser::parser::operator[](int i){
+char ** csv_parser::parser::operator[](int i)const{
     return this->data[i];
 }
 
@@ -208,6 +208,7 @@ csv_parser::parser::~parser(){
         for(int j = 0; j < this->columns_length; ++j){
             delete [] this->data[i][j];
         }
+        delete [] this->data[i];
     }
     delete [] this->data;
     this->data = nullptr;
@@ -259,6 +260,48 @@ void csv_parser::parser::tail(int numRows = 5){
         printf("\n");
     }
     printf("\n");
+}
+
+csv_parser::parser& csv_parser::parser::operator+=(const parser& p){
+    concat(p);
+    return *this;
+}
+
+u_int8_t csv_parser::parser::concat(const parser& p){
+    if(p.columns_length != this->columns_length){
+        return 0;
+    }
+    char *** new_data = new char**[this->size + p.getSize()];
+    for(int i = 0; i < this->size + p.getSize(); ++i){
+        new_data[i] = new char*[this->columns_length];
+    }
+    for(int i = 0; i < this->size + p.getSize(); ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            new_data[i][j] = new char[NUM_LENGTH];
+        }
+    }
+    for(int i = 0; i < this->size; ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            strcpy(new_data[i][j], this->data[i][j]);
+        }
+    }
+    
+    for(int i = this->size; i < this->size + p.getSize(); ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            strcpy(new_data[i][j], p[i - this->size][j]);
+        }
+    }
+    for(int i = 0; i < this->size; ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            delete [] this->data[i][j];
+        }
+        delete [] this->data[i];
+    }
+    delete [] this->data;
+    this->data = new_data;
+    this->size += p.getSize();
+    return 1;
+
 }
 
 int csv_parser::parser::getSize() const {

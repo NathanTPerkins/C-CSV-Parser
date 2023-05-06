@@ -31,7 +31,7 @@ csv_parser::arduino_parser::arduino_parser(const char * filename, int precision 
     csv.close();
 }
 
-void csv_parser::arduino_parser::operator=(const arduino_parser& p){
+csv_parser::arduino_parser& csv_parser::arduino_parser::operator=(const arduino_parser& p){
     this->size = p.size;
     this->columns_length = p.columns_length;
     this->precision = p.precision;
@@ -61,6 +61,8 @@ void csv_parser::arduino_parser::operator=(const arduino_parser& p){
             strcpy(this->data[i][j], p.data[i][j]);
         }
     }
+
+    return *this;
 }
 
 csv_parser::arduino_parser::arduino_parser(const arduino_parser& p){
@@ -215,6 +217,7 @@ csv_parser::arduino_parser::~arduino_parser(){
         for(int j = 0; j < this->columns_length; ++j){
             delete [] this->data[i][j];
         }
+        delete [] this->data[i];
     }
     delete [] this->data;
     this->data = nullptr;
@@ -266,6 +269,48 @@ void csv_parser::arduino_parser::tail(int numRows = 5){
         Serial.printf("\n");
     }
     Serial.printf("\n");
+}
+
+u_int8_t csv_parser::arduino_parser::concat(const parser& p){
+    if(p.columns_length != this->columns_length){
+        return 0;
+    }
+    char *** new_data = new char**[this->size + p.getSize()];
+    for(int i = 0; i < this->size + p.getSize(); ++i){
+        new_data[i] = new char*[this->columns_length];
+    }
+    for(int i = 0; i < this->size + p.getSize(); ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            new_data[i][j] = new char[NUM_LENGTH];
+        }
+    }
+    for(int i = 0; i < this->size; ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            strcpy(new_data[i][j], this->data[i][j]);
+        }
+    }
+    
+    for(int i = this->size; i < this->size + p.getSize(); ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            strcpy(new_data[i][j], p[i - this->size][j]);
+        }
+    }
+    for(int i = 0; i < this->size; ++i){
+        for(int j = 0; j < this->columns_length; ++j){
+            delete [] this->data[i][j];
+        }
+        delete [] this->data[i];
+    }
+    delete [] this->data;
+    this->data = new_data;
+    this->size += p.getSize();
+    return 1;
+
+}
+
+csv_parser::arduino_parser& csv_parser::arduino_parser::operator+=(const arduino_parser& p){
+    concat(p);
+    return *this;
 }
 
 int csv_parser::arduino_parser::getSize() const {
