@@ -12,6 +12,8 @@
 
 namespace csv_parser{
 
+    const enum ERROR_CODES{FILE_NOT_FOUND};
+
     class parser final{
     private:
         char *m_fileName;
