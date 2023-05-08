@@ -23,7 +23,7 @@ csv_parser::parser::parser(const char * filename, int precision = 10){
     this->size = getNumEntries(csv);
     this->data = new char**[this->size];
     for(int i = 0; i < this->size; ++i){
-        this->data[i] = new char*[col_count];
+        this->data[i] = new char*[col_count];0
     }
     for(int i = 0; i < this->size; ++i){
         for(int j = 0; j < col_count; ++j){
