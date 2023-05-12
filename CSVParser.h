@@ -12,8 +12,9 @@
 
 namespace csv_parser{
 
+    #ifdef NO_THROW
     enum ERROR_CODES{FILE_NOT_FOUND};
-
+    #endif
     class parser final{
     private:
         char *m_fileName;

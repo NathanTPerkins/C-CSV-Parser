@@ -6,7 +6,11 @@ csv_parser::parser::parser(const char * filename, int precision = 10){
 
     FILE *csv = fopen(this->m_fileName, "r");
     if(csv == NULL){
+        #ifdef NO_THROW
         throw ERROR_CODES::FILE_NOT_FOUND;
+        #else
+        return;
+        #endif
     }
     int col_count = 0, longest_col = 0; 
     this->columns = nullptr;
