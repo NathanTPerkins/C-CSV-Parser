@@ -6,7 +6,7 @@ csv_parser::parser::parser(const char * filename, int precision = 10){
 
     FILE *csv = fopen(this->m_fileName, "r");
     if(csv == NULL){
-        #ifdef NO_THROW
+        #ifndef NO_THROW
         throw ERROR_CODES::FILE_NOT_FOUND;
         #else
         return;
