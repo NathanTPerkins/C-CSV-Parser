@@ -292,7 +292,7 @@ void csv_parser::arduino_parser::tail(int numRows = 5){
 //     return csv;
 // }
 
-u_int8_t csv_parser::arduino_parser::concat(const parser& p){
+u_int8_t csv_parser::arduino_parser::concat(const csv_parser::arduino_parser& p){
     if(p.columns_length != this->columns_length){
         return 0;
     }
