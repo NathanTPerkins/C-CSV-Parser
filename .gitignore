@@ -2,8 +2,10 @@ test.csv
 csv
 main.cpp
 test2.csv
-./vscode
+/.vscode/
 BRR_5-3.csv
 VelvAlt.csv
 test3.csv
 VelvAlt2.csv
+Makefile
+.DS_Store/
