@@ -68,7 +68,7 @@ namespace csv_parser{
         arduino_parser(const arduino_parser&);
         arduino_parser& operator=(const arduino_parser&);
         arduino_parser& operator+=(const arduino_parser&);
-        char ** operator[](int);
+        char ** operator[](int)const;
         arduino_parser(const char *, int);
         ~arduino_parser();
 

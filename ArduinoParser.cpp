@@ -97,18 +97,19 @@ csv_parser::arduino_parser::arduino_parser(const arduino_parser& p){
     }
 }
 
-char ** csv_parser::arduino_parser::operator[](int i){
+char ** csv_parser::arduino_parser::operator[](int i)const{
     return this->data[i];
 }
 
 void csv_parser::arduino_parser::rewind(File* input_file){
-    const char * filename = input_file->name();
+    char filename[strlen(input_file->name()) + 1];
+    strcpy(filename, input_file->name());
     input_file->close();
     *input_file = SD.open(filename, FILE_READ);
 }
 
 int csv_parser::arduino_parser::getNumEntries(File& input_file){
-    if(input_file == NULL){
+    if(!input_file ){
         return 0;
     }
     rewind(&input_file);
@@ -124,7 +125,7 @@ int csv_parser::arduino_parser::getNumEntries(File& input_file){
 }
 
 u_int8_t csv_parser::arduino_parser::setData(File& input_file){
-    if(input_file == NULL){
+    if(!input_file ){
         return 0;
     }
     rewind(&input_file);
@@ -160,7 +161,7 @@ u_int8_t csv_parser::arduino_parser::setData(File& input_file){
 }
 
 u_int8_t csv_parser::arduino_parser::setColumns(File& input_file, int* longest_col){
-    if(input_file == NULL){
+    if(!input_file){
         return 0;
     }
     rewind(&input_file);
@@ -183,7 +184,7 @@ u_int8_t csv_parser::arduino_parser::setColumns(File& input_file, int* longest_c
 }
 
 u_int8_t csv_parser::arduino_parser::getColumnData(File& input_file, int *col_count, int *longest_col){
-    if(input_file == NULL || *col_count != 0 || *longest_col != 0){
+    if(!input_file || *col_count != 0 || *longest_col != 0){
         return 0;
     }
     char c;

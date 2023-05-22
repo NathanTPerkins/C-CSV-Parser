@@ -68,6 +68,8 @@ csv_parser::parser& csv_parser::parser::operator=(const parser& p){
             strcpy(this->data[i][j], p.data[i][j]);
         }
     }
+
+    return *this;
 }
 
 csv_parser::parser::parser(const parser& p){
