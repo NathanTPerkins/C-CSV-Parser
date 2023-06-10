@@ -168,12 +168,11 @@ u_int8_t csv_parser::arduino_parser::setColumns(File& input_file, int* longest_c
     char col_name[*longest_col];
     memset(col_name, 0, *longest_col);
     char c;
-    int i = 0, j = 0;
+    int i = 0;
     while((c = input_file.read()) != '\n'){
         if(c == ','){
             strcpy(this->columns[i],col_name);
             memset(col_name, 0, *longest_col);
-            j = 0;
             ++i;
         }else{
             strncat(col_name, &c, 1);
