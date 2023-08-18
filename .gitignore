@@ -11,3 +11,4 @@ Makefile
 .DS_Store/
 Arduino-SD-for-PC/
 Arduino-Cores-for-PC/
+simulation.csv
