@@ -1,33 +1,51 @@
 #include "CSVParser.h"
 #ifdef ARDUINO_PARSER
 csv_parser::arduino_parser::arduino_parser(const char * filename, int precision = 10){
-    this->m_fileName = new char[strlen(filename)];
+    this->m_fileName = new char[strlen(filename) + 1];
     this->precision = precision;
+    memset(this->m_fileName, 0, strlen(filename) + 1);
     strcpy(this->m_fileName, filename);
-
     File csv = SD.open(this->m_fileName, FILE_READ);
     int col_count = 0, longest_col = 0; 
     this->columns = nullptr;
     this->columns_length = 0;
     if(getColumnData(csv, &col_count, &longest_col)){
+        Serial.println("AVAILABLE 3: " + String(csv.available()));
         this->columns_length = col_count;
         this->longest_col = longest_col;
         this->columns = new char*[col_count];
         for(int i = 0; i < col_count; ++i)
             this->columns[i] = new char[longest_col];
     }
+    Serial.println("AVAILABLE 4: " + String(csv.available()));
+    rewind(&csv);
+    Serial.println("AVAILABLE 5: " + String(csv.available()));
     setColumns(csv, &longest_col);
+    Serial.println("AVAILABLE 6: " + String(csv.available()));
+    rewind(&csv);
+    Serial.println("AVAILABLE 7: " + String(csv.available()));
     this->size = getNumEntries(csv);
-    this->data = new char**[this->size];
+    Serial.println("AVAILABLE 8: " + String(csv.available()));
+    rewind(&csv);
+    Serial.println("AVAILABLE 9: " + String(csv.available()));
+    Serial.printf("Column Count: %d, Size: %d, Longest Col: %d\n", col_count, this->size, longest_col);
+    this->data = (char ***)extmem_malloc(sizeof(char**) * this->size);
+    int i = 0;
+    i = 0;
+    Serial.printf("Column Count: %d, Size: %d, Longest Col: %d, i:%d\n", col_count, this->size, longest_col, i);
     for(int i = 0; i < this->size; ++i){
-        this->data[i] = new char*[col_count];
-    }
-    for(int i = 0; i < this->size; ++i){
+        this->data[i] = (char **)extmem_malloc(sizeof(char*) * col_count);
         for(int j = 0; j < col_count; ++j){
-            this->data[i][j] = new char[NUM_LENGTH];
+            Serial.printf("i: %d, j: %d\n", i, j);
+            this->data[i][j] = (char *)extmem_malloc(sizeof(char) * 1);
+            // memset(this->data[i][j], 0, NUM_LENGTH);
         }
     }
+    Serial.println("AVAILABLE 10: " + String(csv.available()));
     setData(csv);
+    Serial.println("AVAILABLE 11: " + String(csv.available()));
+    rewind(&csv);
+    Serial.println("AVAILABLE 12: " + String(csv.available()));
     csv.close();
 }
 
@@ -102,10 +120,8 @@ char ** csv_parser::arduino_parser::operator[](int i)const{
 }
 
 void csv_parser::arduino_parser::rewind(File* input_file){
-    char filename[strlen(input_file->name()) + 1];
-    strcpy(filename, input_file->name());
     input_file->close();
-    *input_file = SD.open(filename, FILE_READ);
+    *input_file = SD.open(this->m_fileName, FILE_READ);
 }
 
 int csv_parser::arduino_parser::getNumEntries(File& input_file){

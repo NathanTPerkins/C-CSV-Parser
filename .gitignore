@@ -1,4 +1,5 @@
 test.csv
+*.o
 csv
 main.cpp
 test2.csv
@@ -12,3 +13,4 @@ Makefile
 Arduino-SD-for-PC/
 Arduino-Cores-for-PC/
 simulation.csv
+bmp388_uppenheimer.csv
