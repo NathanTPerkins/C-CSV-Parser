@@ -29,7 +29,6 @@ csv_parser::arduino_parser::arduino_parser(const char * filename, int precision 
     for(int i = 0; i < this->size; ++i){
         this->data[i] = (char **)extmem_malloc(sizeof(char*) * col_count);
         for(int j = 0; j < col_count; ++j){
-            Serial.printf("i: %d, j: %d\n", i, j);
             this->data[i][j] = (char *)extmem_malloc(sizeof(char) * longest_col);
             memset(this->data[i][j], 0, NUM_LENGTH);
         }
