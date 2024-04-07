@@ -237,14 +237,14 @@ csv_parser::arduino_parser::~arduino_parser(){
     for(int i = 0; i < this->size; ++i){
         for(int j = 0; j < this->columns_length; ++j){
             Serial.println("LINE 5 - 0 " + String(i) + " " + String(j));
-            delete [] this->data[i][j];
+            extmem_free(this->data[i][j]);
             Serial.println("LINE 5 - 1 " + String(i) + " " + String(j));
         }
-        delete [] this->data[i];
+        extmem_free(this->data[i]);
         Serial.println("LINE 6 " + String(i));
     }
     Serial.println("LINE 7");
-    delete [] this->data;
+    extmem_free(this->data);
     Serial.println("LINE 8");
     this->data = nullptr;
     Serial.println("LINE 9");
