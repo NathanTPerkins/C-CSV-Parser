@@ -10,29 +10,22 @@ csv_parser::arduino_parser::arduino_parser(const char * filename, int precision 
     this->columns = nullptr;
     this->columns_length = 0;
     if(getColumnData(csv, &col_count, &longest_col)){
-        Serial.println("AVAILABLE 3: " + String(csv.available()));
         this->columns_length = col_count;
         this->longest_col = longest_col;
         this->columns = new char*[col_count];
         for(int i = 0; i < col_count; ++i)
             this->columns[i] = new char[longest_col];
     }
-    Serial.println("AVAILABLE 4: " + String(csv.available()));
+
     rewind(&csv);
-    Serial.println("AVAILABLE 5: " + String(csv.available()));
     setColumns(csv, &longest_col);
-    Serial.println("AVAILABLE 6: " + String(csv.available()));
+
     rewind(&csv);
-    Serial.println("AVAILABLE 7: " + String(csv.available()));
     this->size = getNumEntries(csv);
-    Serial.println("AVAILABLE 8: " + String(csv.available()));
     rewind(&csv);
-    Serial.println("AVAILABLE 9: " + String(csv.available()));
-    Serial.printf("Column Count: %d, Size: %d, Longest Col: %d\n", col_count, this->size, longest_col);
     this->data = (char ***)extmem_malloc(sizeof(char**) * this->size);
     int i = 0;
     i = 0;
-    Serial.printf("Column Count: %d, Size: %d, Longest Col: %d, i:%d\n", col_count, this->size, longest_col, i);
     for(int i = 0; i < this->size; ++i){
         this->data[i] = (char **)extmem_malloc(sizeof(char*) * col_count);
         for(int j = 0; j < col_count; ++j){
@@ -41,11 +34,8 @@ csv_parser::arduino_parser::arduino_parser(const char * filename, int precision 
             memset(this->data[i][j], 0, NUM_LENGTH);
         }
     }
-    Serial.println("AVAILABLE 10: " + String(csv.available()));
     setData(csv);
-    Serial.println("AVAILABLE 11: " + String(csv.available()));
     rewind(&csv);
-    Serial.println("AVAILABLE 12: " + String(csv.available()));
     csv.close();
 }
 
@@ -223,35 +213,21 @@ u_int8_t csv_parser::arduino_parser::getColumnData(File& input_file, int *col_co
 }
 
 csv_parser::arduino_parser::~arduino_parser(){
-    Serial.println("LINE 0");
     for(int i = 0; i < this->columns_length; ++i){
-        Serial.println("LINE 1-0 - " + String(i));
         delete [] this->columns[i];
-        Serial.println("LINE 1-1 - " + String(i));
     }
     delete [] this->columns;
-    Serial.println("LINE 2");
     this->columns = nullptr;
-    Serial.println("LINE 3");
-    Serial.println("LINE 4 " + String(this->size));
     for(int i = 0; i < this->size; ++i){
         for(int j = 0; j < this->columns_length; ++j){
-            Serial.println("LINE 5 - 0 " + String(i) + " " + String(j));
             extmem_free(this->data[i][j]);
-            Serial.println("LINE 5 - 1 " + String(i) + " " + String(j));
         }
         extmem_free(this->data[i]);
-        Serial.println("LINE 6 " + String(i));
     }
-    Serial.println("LINE 7");
     extmem_free(this->data);
-    Serial.println("LINE 8");
     this->data = nullptr;
-    Serial.println("LINE 9");
     delete [] this->m_fileName;
-    Serial.println("LINE 10");
     this->m_fileName = nullptr;
-    Serial.println("LINE - DONE");
 }
 
 void csv_parser::arduino_parser::head(int numRows = 5){
