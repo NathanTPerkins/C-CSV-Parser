@@ -223,22 +223,36 @@ u_int8_t csv_parser::arduino_parser::getColumnData(File& input_file, int *col_co
 }
 
 csv_parser::arduino_parser::~arduino_parser(){
+    Serial.println("LINE 0");
     for(int i = 0; i < this->columns_length; ++i){
+        Serial.println("LINE 1-0 - " + String(i));
         delete [] this->columns[i];
+        Serial.println("LINE 1-1 - " + String(i));
     }
     delete [] this->columns;
+    Serial.println("LINE 2");
     this->columns = nullptr;
+    Serial.println("LINE 3");
     this->columns_length = 0;
+    Serial.println("LINE 4");
     for(int i = 0; i < this->size; ++i){
         for(int j = 0; j < this->columns_length; ++j){
+            Serial.println("LINE 5 - 0 " + String(i) + " " + String(j));
             delete [] this->data[i][j];
+            Serial.println("LINE 5 - 1 " + String(i) + " " + String(j));
         }
         delete [] this->data[i];
+        Serial.println("LINE 6 " + String(i));
     }
+    Serial.println("LINE 7");
     delete [] this->data;
+    Serial.println("LINE 8");
     this->data = nullptr;
+    Serial.println("LINE 9");
     delete [] this->m_fileName;
+    Serial.println("LINE 10");
     this->m_fileName = nullptr;
+    Serial.println("LINE - DONE");
 }
 
 void csv_parser::arduino_parser::head(int numRows = 5){
