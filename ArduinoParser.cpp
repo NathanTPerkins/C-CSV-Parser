@@ -37,8 +37,8 @@ csv_parser::arduino_parser::arduino_parser(const char * filename, int precision 
         this->data[i] = (char **)extmem_malloc(sizeof(char*) * col_count);
         for(int j = 0; j < col_count; ++j){
             Serial.printf("i: %d, j: %d\n", i, j);
-            this->data[i][j] = (char *)extmem_malloc(sizeof(char) * 1);
-            // memset(this->data[i][j], 0, NUM_LENGTH);
+            this->data[i][j] = (char *)extmem_malloc(sizeof(char) * NUM_LENGTH);
+            memset(this->data[i][j], 0, NUM_LENGTH);
         }
     }
     Serial.println("AVAILABLE 10: " + String(csv.available()));

@@ -8,7 +8,7 @@
 #include <Arduino.h>
 #endif
 
-#define NUM_LENGTH 100
+#define NUM_LENGTH 20
 
 namespace csv_parser{
 
